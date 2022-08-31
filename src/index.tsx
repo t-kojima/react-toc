@@ -74,11 +74,11 @@ const Toc = ({
   )
   const headingObjects = matchedHeadings?.map((heading) =>
     newHeading(heading, limit, customMatchers),
-  ) || [];
+  ).filter(_ => _) as Heading[] || [];
 
-  const minLevel = Math.min(...headingObjects.map(_ => _?.level || 9))
+  const minLevel = Math.min(...headingObjects.map(_ => _.level))
   const nestedHeadingObjects = headingObjects.reduce((acc, cur) => {
-    if (!cur || cur.level <= minLevel || !acc.length) return [...acc, cur]
+    if (cur.level <= minLevel || !acc.length) return [...acc, cur]
     const _prev = acc[acc.length - 1]
     const addChildToPrev = (prev: Heading) => {
       if (prev.level < cur.level) {

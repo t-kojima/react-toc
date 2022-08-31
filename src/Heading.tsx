@@ -33,7 +33,7 @@ export default class Heading {
 const createListItem = (heading: Heading): JSX.Element => {
   const link = createLink(heading.title);
   return (
-    <li>
+    <li key={heading.title}>
       <a href={`#${replaceAll(link, heading.customMatchers)}`}>{createTitle(heading.title, heading.titleLimit)}</a>
       {heading.children.length !== 0 && <ul>{heading.children.map(child => createListItem(child))}</ul>}
     </li>
