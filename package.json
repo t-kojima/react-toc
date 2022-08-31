@@ -1,6 +1,6 @@
 {
   "name": "react-toc",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Create a table of contents from the given markdown text.",
   "author": "K-Sato1995",
   "license": "MIT",
