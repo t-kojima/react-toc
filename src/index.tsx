@@ -74,10 +74,25 @@ const Toc = ({
   )
   const headingObjects = matchedHeadings?.map((heading) =>
     newHeading(heading, limit, customMatchers),
-  )
+  ) || [];
+
+  const minLevel = Math.min(...headingObjects.map(_ => _?.level || 9))
+  const nestedHeadingObjects = headingObjects.reduce((acc, cur) => {
+    if (!cur || cur.level <= minLevel || !acc.length) return [...acc, cur]
+    const _prev = acc[acc.length - 1]
+    const addChildToPrev = (prev: Heading) => {
+      if (prev.level < cur.level) {
+        prev.addChild(cur)
+      } else {
+        prev.children.length && addChildToPrev(prev.children[prev.children.length - 1])
+      }
+    }
+    addChildToPrev(_prev)
+    return acc
+  }, [])
   const headingTags:
     | JSX.Element[]
-    | undefined = headingObjects?.map((heading: Heading) =>
+    | undefined = nestedHeadingObjects.map((heading: Heading) =>
     heading.generateList(),
   )
 

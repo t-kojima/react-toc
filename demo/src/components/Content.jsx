@@ -1,7 +1,7 @@
 import '../styles/Content.css';
 import React from "react";
 import { CONTENT as mdContent } from '../consts'
-import Toc from "react-toc";
+import Toc from './toc/index'
 import remarkGfm from 'remark-gfm'
 import ReactMarkdown from 'react-markdown'
 

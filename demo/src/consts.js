@@ -15,6 +15,10 @@ Run the command below.
 npm install --save react-toc
 \`\`\`
 
+### test
+
+test
+
 ## Install the package with yarn
 
 Run the command below.

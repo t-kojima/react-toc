@@ -6,6 +6,7 @@ export default class Heading {
   level: number
   titleLimit: number
   customMatchers: CustomMatchers
+  children: Heading[]
 
   constructor(
     title: string,
@@ -17,21 +18,27 @@ export default class Heading {
     this.level = level
     this.titleLimit = titleLimit
     this.customMatchers = customMatchers ? customMatchers : {}
+    this.children = []
+  }
+
+  addChild(child: Heading) {
+    this.children.push(child);
   }
 
   generateList(): JSX.Element {
-    const link = createLink(this.title)
-    const listItem = (
-      <li>
-        <a href={`#${replaceAll(link, this.customMatchers)}`}>
-          {createTitle(this.title, this.titleLimit)}
-        </a>
-      </li>
-    )
-
-    return <>{nestUl(this.level, listItem)}</>
+    return <>{createListItem(this)}</>
   }
 }
+
+const createListItem = (heading: Heading): JSX.Element => {
+  const link = createLink(heading.title);
+  return (
+    <li>
+      <a href={`#${replaceAll(link, heading.customMatchers)}`}>{createTitle(heading.title, heading.titleLimit)}</a>
+      {heading.children.length !== 0 && <ul>{heading.children.map(child => createListItem(child))}</ul>}
+    </li>
+  );
+};
 
 /*
  Create a new heading object from the given string
@@ -47,56 +54,6 @@ const newHeading = (
   const matchers = customMatchers ? customMatchers : {}
 
   return new Heading(headingText, headingLevel, titleLimit, matchers)
-}
-
-/* 
- Return a nested Unordered list based on the given heading level.
-*/
-const nestUl = (level: number, listItem: React.ReactNode) => {
-  switch (level) {
-    case 1:
-      return listItem
-    case 2:
-      return <ul>{listItem}</ul>
-    case 3:
-      return (
-        <ul>
-          <ul>{listItem}</ul>
-        </ul>
-      )
-    case 4:
-      return (
-        <ul>
-          <ul>
-            <ul>{listItem}</ul>
-          </ul>
-        </ul>
-      )
-    case 5:
-      return (
-        <ul>
-          <ul>
-            <ul>
-              <ul>{listItem}</ul>
-            </ul>
-          </ul>
-        </ul>
-      )
-    case 6:
-      return (
-        <ul>
-          <ul>
-            <ul>
-              <ul>
-                <ul>{listItem}</ul>
-              </ul>
-            </ul>
-          </ul>
-        </ul>
-      )
-    default:
-      return listItem
-  }
 }
 
 export { newHeading }
